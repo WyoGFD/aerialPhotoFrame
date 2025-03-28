@@ -1,0 +1,37 @@
+#' @keywords internal
+"_PACKAGE"
+
+## usethis namespace: start
+#' @importFrom dplyr arrange
+#' @importFrom dplyr filter
+#' @importFrom dplyr group_by
+#' @importFrom dplyr left_join
+#' @importFrom dplyr mutate
+#' @importFrom dplyr relocate
+#' @importFrom dplyr select
+#' @importFrom dplyr summarize
+#' @importFrom exifr read_exif
+#' @importFrom FedData get_ned
+#' @importFrom geosphere bearing
+#' @importFrom lubridate ymd_hms
+#' @importFrom sf st_as_sf
+#' @importFrom sf st_as_sfc
+#' @importFrom sf st_bbox
+#' @importFrom sf st_cast
+#' @importFrom sf st_centroid
+#' @importFrom sf st_combine
+#' @importFrom sf st_coordinates
+#' @importFrom sf st_crs
+#' @importFrom sf st_drop_geometry
+#' @importFrom sf st_geometry
+#' @importFrom sf st_sf
+#' @importFrom sf st_transform
+#' @importFrom sf st_zm
+#' @importFrom terra extract
+#' @importFrom tidyr pivot_longer
+#' @importFrom tidyr pivot_wider
+#' @importFrom tidyr separate_wider_delim
+#' @importFrom units as_units
+#' @importFrom units set_units
+## usethis namespace: end
+NULL

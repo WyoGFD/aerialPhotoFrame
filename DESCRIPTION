@@ -1,0 +1,28 @@
+Package: aerialPhotoFrame
+Title: Create Ground Footprint Wireframe from Aerial Photos
+Version: 0.9.0
+Date: 2025-03-28
+Authors@R: c(
+    person("Jason", "Carlisle", role = c("aut", "cre"), email = "jason.carlisle@wyo.gov"),
+    person("Eric", "Newkirk", role = "aut", email = "eric.newkirk@wyo.gov") 
+    )
+Description: Identify the ground extent (AKA wireframe) of a photo taken from 
+  the air, and create a spatial (sf) object. Useful in calculating area sampled
+  in aerial photos and approximate spatial location. Should be applicable for 
+  photos taken from airplane or drone.
+License: GPL (>= 3)
+URL: https://github.com/WyoGFD/aerialPhotoFrame
+BugReports: https://github.com/WyoGFD/aerialPhotoFrame/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    dplyr,
+    exifr,
+    FedData,
+    geosphere,
+    lubridate,
+    sf,
+    terra,
+    tidyr,
+    units
