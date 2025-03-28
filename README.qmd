@@ -60,7 +60,11 @@ packagePath <- "C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame"
 # Extract camera location from photos
 pts <- extractPoints(file.path(packagePath,
                                "extdata"))
-names(pts)
+
+# View first few rows
+head(data.frame(sf::st_drop_geometry(pts)))
+
+# Map
 plot(sf::st_geometry(pts))
 ```
 ```{r}
@@ -68,8 +72,9 @@ plot(sf::st_geometry(pts))
 # Add altitude, specifically above-ground-level
 pts <- calcAltitude(pts)
 
+# View first few rows
 # Note new columns starting within elev
-names(pts)
+head(data.frame(sf::st_drop_geometry(pts)))
 
 # Histogram of camera altitudes above ground level
 hist(pts$elevAGL,
@@ -83,8 +88,8 @@ hist(pts$elevAGL,
 # Create wireframe of each photo's field of view (the area of the ground photographed)
 # Output in NAD 83 Zone 12N (EPSG 26912)
 wires <- wireFrame(pts, crs = 26912)
+
+# Map
 plot(sf::st_geometry(wires))
 
 ```
-
-End
