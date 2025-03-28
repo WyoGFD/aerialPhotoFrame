@@ -1,5 +1,5 @@
 Package: aerialPhotoFrame
-Title: Create Ground Footprint Wireframe from Aerial Photos
+Title: Create Ground Footprint Wireframes from Aerial Photos
 Version: 0.9.0
 Date: 2025-03-28
 Authors@R: c(
