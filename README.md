@@ -115,7 +115,7 @@ pts <- calcAltitude(pts)
 
 ``` r
 # View first few rows
-# Note new columns starting within elev
+# Note new columns starting within Altitude
 head(data.frame(sf::st_drop_geometry(pts)))
 ```
 
@@ -143,16 +143,16 @@ head(data.frame(sf::st_drop_geometry(pts)))
     3 39.597786155869 0.0072 -24.80252  -88.62881 -90.47284 91.53217 [°]
     4 39.597786155869 0.0072  -3.85016  -87.28128 -90.11310 91.83444 [°]
     5 39.597786155869 0.0072 -26.84106  -88.65485 -90.51263 91.83444 [°]
-        elevCamera   elevGround      elevAGL
-    1 2566.082 [m] 2150.821 [m] 415.2612 [m]
-    2 2572.137 [m] 2149.412 [m] 422.7249 [m]
-    3 2578.966 [m] 2147.770 [m] 431.1962 [m]
-    4 2585.556 [m] 2144.753 [m] 440.8026 [m]
-    5 2590.594 [m] 2141.549 [m] 449.0452 [m]
+      AltitudeCamera AltitudeGround  AltitudeAGL
+    1   2566.082 [m]   2150.821 [m] 415.2612 [m]
+    2   2572.137 [m]   2149.412 [m] 422.7249 [m]
+    3   2578.966 [m]   2147.770 [m] 431.1962 [m]
+    4   2585.556 [m]   2144.753 [m] 440.8026 [m]
+    5   2590.594 [m]   2141.549 [m] 449.0452 [m]
 
 ``` r
 # Histogram of camera altitudes above ground level
-hist(pts$elevAGL,
+hist(pts$AltitudeAGL,
      main = "Histogram of Camera Altitudes",
      xlab = "Altitude above ground level")
 ```
@@ -169,3 +169,12 @@ plot(sf::st_geometry(wires))
 ```
 
 ![](README_files/figure-commonmark/unnamed-chunk-3-1.png)
+
+``` r
+# Histogram of photo areas
+hist(units::set_units(wires$Area, "ha"),
+     main = "Histogram of Photo Areas",
+     xlab = "Area")
+```
+
+![](README_files/figure-commonmark/unnamed-chunk-3-2.png)
