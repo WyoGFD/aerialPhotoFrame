@@ -14,6 +14,7 @@
 #' @importFrom FedData get_ned
 #' @importFrom geosphere bearing
 #' @importFrom lubridate ymd_hms
+#' @importFrom sf st_area
 #' @importFrom sf st_as_sf
 #' @importFrom sf st_as_sfc
 #' @importFrom sf st_bbox

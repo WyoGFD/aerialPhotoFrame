@@ -17,7 +17,7 @@ Default is \code{"1"} for 1 arc-second.}
 \item{force.redo}{logical indicating whether the digital elevation model
 raster should be re-downloaded to the local machine if it already exists.
 Passed to \code{force.redo} argument of \code{FedData::get_ned}.
-Default is \code{FALSE}.  If your output has NAs in the \code{elevAGL}
+Default is \code{FALSE}.  If your output has NAs in the \code{AltitudeAGL}
 column, try setting this to \code{TRUE}.}
 }
 \value{
@@ -38,6 +38,6 @@ plot(sf::st_geometry(pts))
 # Add altitude, specifically above-ground-level
 pts <- calcAltitude(pts)
 names(pts)
-hist(pts$elevAGL, xlab = "Camera altitude AGL")
+hist(pts$AltitudeAGL, xlab = "Camera altitude AGL")
 }
 }

@@ -20,7 +20,7 @@
 #' # Add altitude, specifically above-ground-level
 #' pts <- calcAltitude(pts)
 #' names(pts)
-#' hist(pts$elevAGL, xlab = "Camera altitude AGL")
+#' hist(pts$AltitudeAGL, xlab = "Camera altitude AGL")
 #' 
 #' # Create wireframe of each photo's field of view
 #' # AKA the area of the ground photographed
@@ -60,7 +60,7 @@ wireFrame <- function(pts,
                   ImageHeight,
                   ImageWidth,
                   FOV,
-                  elevAGL,
+                  AltitudeAGL,
                   X,
                   Y)
   
@@ -91,7 +91,7 @@ wireFrame <- function(pts,
   # Calculate ground dimensions (half width and half height) of each photo
   # based on right-triangle trigonometry and exif-stored photo aspect ratio
   pts_df <- pts_df |>
-    mutate(w_half = sqrt((elevAGL / cos(fov_half))^2 - elevAGL^2),
+    mutate(w_half = sqrt((AltitudeAGL / cos(fov_half))^2 - AltitudeAGL^2),
            h_half = w_half * (ImageHeight / ImageWidth),
            area = 2 * w_half * 2 * h_half)
   
@@ -208,6 +208,12 @@ wireFrame <- function(pts,
   
   # plot(sf::st_geometry(wires_out))
   # plot(sf::st_geometry(pts), col = "black", add = TRUE)
+  
+  
+  # Add area of wireframe
+  wires_out <- wires_out |>
+    dplyr::mutate(Area = sf::st_area(wires_out)) |>
+    dplyr::relocate(Area, .before = "geometry")
 
   
 return(wires_out)

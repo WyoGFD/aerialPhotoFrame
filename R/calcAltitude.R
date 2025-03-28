@@ -8,7 +8,7 @@
 #' @param force.redo logical indicating whether the digital elevation model
 #' raster should be re-downloaded to the local machine if it already exists.
 #' Passed to \code{force.redo} argument of \code{FedData::get_ned}.
-#' Default is \code{FALSE}.  If your output has NAs in the \code{elevAGL}
+#' Default is \code{FALSE}.  If your output has NAs in the \code{AltitudeAGL}
 #' column, try setting this to \code{TRUE}.
 #'
 #' @return sf object, same number of rows as input, with additional columns 
@@ -26,7 +26,7 @@
 #' # Add altitude, specifically above-ground-level
 #' pts <- calcAltitude(pts)
 #' names(pts)
-#' hist(pts$elevAGL, xlab = "Camera altitude AGL")
+#' hist(pts$AltitudeAGL, xlab = "Camera altitude AGL")
 #' }
 
 calcAltitude <- function(pts,
@@ -66,19 +66,19 @@ calcAltitude <- function(pts,
   
   # Extract elevation values at points
   pts <- pts |>
-    dplyr::mutate(elevCamera = sf::st_coordinates(pts)[, 3],
-                  elevGround = terra::extract(dem,
+    dplyr::mutate(AltitudeCamera = sf::st_coordinates(pts)[, 3],
+                  AltitudeGround = terra::extract(dem,
                                               pts,
                                               raw = TRUE)[, 2],
-                  elevAGL = elevCamera - elevGround) |>
-    dplyr::relocate(geometry, .after = elevAGL)
+                  AltitudeAGL = AltitudeCamera - AltitudeGround) |>
+    dplyr::relocate(geometry, .after = AltitudeAGL)
   
   
   # Assign units to meters
   pts <- pts |>
-    dplyr::mutate(elevCamera = units::as_units(elevCamera, "m"),
-                  elevGround = units::as_units(elevGround, "m"),
-                  elevAGL = units::as_units(elevAGL, "m"))
+    dplyr::mutate(AltitudeCamera = units::as_units(AltitudeCamera, "m"),
+                  AltitudeGround = units::as_units(AltitudeGround, "m"),
+                  AltitudeAGL = units::as_units(AltitudeAGL, "m"))
   
   
   return(pts)
