@@ -1,32 +1,120 @@
 # aerialPhotoFrame
-Create a spatial polygon (`sf`) delineating the ground extent (AKA wireframe or
-field of view) of a nadir photo taken from an airplane or drone.
-Useful in approximating the locations and total area sampled in a series of
-aerial photos.
+
+
+Create a spatial polygon (`sf`) delineating the ground extent (AKA
+wireframe or field of view) of a nadir photo taken from an airplane or
+drone. Useful in approximating the locations and total area sampled in a
+series of aerial photos.
+
+## How to Install
+
+From GitHub:
+
+    remotes::install_github("https://github.com/WyoGFD/aerialPhotoFrame")
 
 ## Input
-+ Photos which contain EXIF metadata specifying the GPS location of the camera
-(X, Y, Z coordinates) when the photo was taken, the photo timestamp, and
-information about the photo's aspect ratio and field of view with the camera's
-sensor dimensions and lens focal length.
+
+- Photos which contain EXIF metadata specifying the GPS location of the
+  camera (X, Y, Z coordinates) when the photo was taken, the photo
+  timestamp, and information about the photo’s aspect ratio and field of
+  view with the camera’s sensor dimensions and lens focal length.
 
 ## Output
-+ An `sf` object approximating the area photographed in each photo.
+
+- An `sf` object approximating the area photographed in each photo.
 
 ## General Workflow
-+ `extractPoints` - Extract camera location (3D point) from photos, and
-approximate the direction of travel (and therefore photo orientation) from the
-sequence of photo locations.
-+ `calcAlt` - Download a digital elevation model (DEM) for the
-study area and calculate the camera's approximate altitude above ground level
-based on the camera's altitude above mean sea level (what the GPS records) and 
-the ground elevation (from the DEM).
-+ `wireFrame` - Use EXIF-provided camera and lens specifications, altitude,
-and direction of travel to construct rectangular wireframe of each photo's
-ground extent
+
+- `extractPoints` - Extract camera location (3D point) from photos, and
+  approximate the direction of travel (and therefore photo orientation)
+  from the sequence of photo locations.
+- `calcAlt` - Download a digital elevation model (DEM) for the study
+  area and calculate the camera’s approximate altitude above ground
+  level based on the camera’s altitude above mean sea level (what the
+  GPS records) and the ground elevation (from the DEM).
+- `wireFrame` - Use EXIF-provided camera and lens specifications,
+  altitude, and direction of travel to construct rectangular wireframe
+  of each photo’s ground extent
 
 ## Key Dependencies
-+ The EXIF data associated with photos is read using the `exifr` package, which
-calls [ExifTool](https://exiftool.org/)
-+ The DEM for the study area is downloaded using the `FedData` package, which
-obtains DEMs from the [USGS National Elevation Dataset (NED)](https://www.usgs.gov/3d-elevation-program).
+
+- The EXIF data associated with photos is read using the `exifr`
+  package, which calls [ExifTool](https://exiftool.org/)
+- The DEM for the study area is downloaded using the `FedData` package,
+  which obtains DEMs from the [USGS National Elevation Dataset
+  (NED)](https://www.usgs.gov/3d-elevation-program).
+
+## Example
+
+The package contains 5 example aerial photos collected in Southern
+Wyoming in February 2025. They are located in the `extdata` folder of
+the installed package (e.g.,
+`C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata`).
+
+![image info](ExamplePhotos_Thumbnail.JPG)
+
+``` r
+# Load package
+library(aerialPhotoFrame)
+
+# Path to installed package to access example images
+packagePath <- "C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame"
+
+# Extract camera location from photos
+pts <- extractPoints(file.path(packagePath,
+                               "extdata"))
+```
+
+    Date in ISO8601 format; converting timezone from UTC to "MST".
+
+``` r
+names(pts)
+```
+
+     [1] "FileName"    "SourceFile"  "DateTime"    "ImageWidth"  "ImageHeight"
+     [6] "Megapixels"  "FocalLength" "FOV"         "RollAngle"   "PitchAngle" 
+    [11] "YawAngle"    "Bearing"     "geometry"   
+
+``` r
+plot(sf::st_geometry(pts))
+```
+
+![](README_files/figure-commonmark/unnamed-chunk-1-1.png)
+
+``` r
+# Add altitude, specifically above-ground-level
+pts <- calcAltitude(pts)
+```
+
+    Area of interest includes 1 NED tiles.
+
+    (Down)Loading NED tile for 42N and 109W.
+
+``` r
+names(pts)
+```
+
+     [1] "FileName"    "SourceFile"  "DateTime"    "ImageWidth"  "ImageHeight"
+     [6] "Megapixels"  "FocalLength" "FOV"         "RollAngle"   "PitchAngle" 
+    [11] "YawAngle"    "Bearing"     "elevCamera"  "elevGround"  "elevAGL"    
+    [16] "geometry"   
+
+``` r
+hist(pts$elevAGL,
+     main = "Histogram of Camera Altitudes",
+     xlab = "Altitude above ground level")
+```
+
+![](README_files/figure-commonmark/unnamed-chunk-2-1.png)
+
+``` r
+# Create wireframe of each photo's field of view (the area of the ground photographed)
+# Output in NAD 83 Zone 12N (EPSG 26912)
+wires <- wireFrame(pts, crs = 26912)
+plot(sf::st_geometry(wires))
+plot(sf::st_geometry(pts), col = "black", add = TRUE)
+```
+
+![](README_files/figure-commonmark/unnamed-chunk-3-1.png)
+
+End
