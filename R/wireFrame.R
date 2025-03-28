@@ -20,7 +20,7 @@
 #' # Add altitude, specifically above-ground-level
 #' pts <- calcAltitude(pts)
 #' names(pts)
-#' hist(pts$elevAGL, xlab = "Camera altitude AGL meters")
+#' hist(pts$elevAGL, xlab = "Camera altitude AGL")
 #' 
 #' # Create wireframe of each photo's field of view
 #' # AKA the area of the ground photographed

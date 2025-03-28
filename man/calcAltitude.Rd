@@ -38,6 +38,6 @@ plot(sf::st_geometry(pts))
 # Add altitude, specifically above-ground-level
 pts <- calcAltitude(pts)
 names(pts)
-hist(pts$elevAGL, xlab = "Camera altitude AGL meters")
+hist(pts$elevAGL, xlab = "Camera altitude AGL")
 }
 }

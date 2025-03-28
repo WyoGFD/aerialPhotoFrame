@@ -4,7 +4,7 @@
 \name{aerialPhotoFrame-package}
 \alias{aerialPhotoFrame}
 \alias{aerialPhotoFrame-package}
-\title{aerialPhotoFrame: Create Ground Footprint Wireframe from Aerial Photos}
+\title{aerialPhotoFrame: Create Ground Footprint Wireframes from Aerial Photos}
 \description{
 Identify the ground extent (AKA wireframe) of a photo taken from the air, and create a spatial (sf) object. Useful in calculating area sampled in aerial photos and approximate spatial location. Should be applicable for photos taken from airplane or drone.
 }

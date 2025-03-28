@@ -26,7 +26,7 @@
 #' # Add altitude, specifically above-ground-level
 #' pts <- calcAltitude(pts)
 #' names(pts)
-#' hist(pts$elevAGL, xlab = "Camera altitude AGL meters")
+#' hist(pts$elevAGL, xlab = "Camera altitude AGL")
 #' }
 
 calcAltitude <- function(pts,
