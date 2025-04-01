@@ -146,7 +146,7 @@ wireFrame <- function(pts,
   
   # Rotate using affine transformation
   # Could also scale larger or smaller using same, but opted to construct to
-  # correct diemsions first than rescale later
+  # correct dimensions first than rescale later
   scaleFactor <- 1
   
   # Convert rotation degrees (from N) from degrees to radians
@@ -177,10 +177,9 @@ wireFrame <- function(pts,
   
   
   # Apply transformation photo by photo, then bind them all together
-  wires_rot_sfc <- dplyr::bind_rows(
-    lapply(1:length(wires_sfc), function(i) {
-      (wires_sfc[i] - pts_sfc[i]) * rot(bearingRadians[i]) * scaleFactor + pts_sfc[i]
-    }))
+  wires_rot_sfc <- do.call(rbind, lapply(1:length(wires_sfc), function(i) {
+    (wires_sfc[i] - pts_sfc[i]) * rot(bearingRadians[i]) * scaleFactor + pts_sfc[i]
+  }))
   
   
   # Make sf object with primary key added back to data.frame
