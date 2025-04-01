@@ -93,17 +93,17 @@ extractPoints <- function(dir,
   
   # Read exif data
   # Move FileName to first col position
-  ex <- exifr::read_exif(fileList,
-                          tags = tagsToRead) |>
-    dplyr::relocate(FileName)
+  ex <- read_exif(fileList,
+                  tags = tagsToRead) |>
+    relocate(FileName)
   
-
+  
   # # Slower option to read all tags, then select the tags of interest
-  # ex <- exifr::read_exif(fileList)
+  # ex <- read_exif(fileList)
   # 
   # # Keep cols of interest
   # ex <- ex |>
-  #   dplyr::select(c("SourceFile", tagsToRead))
+  #   select(c("SourceFile", tagsToRead))
   
   
   # Check that the number of requested tags was returned
@@ -120,36 +120,36 @@ extractPoints <- function(dir,
   # Hard-coding the MST timezone here, would be better to determine from exif
   # (note, there are specific exif cols for time offset)
   ex <- ex |>
-    dplyr::mutate(DateTime = lubridate::ymd_hms(SubSecCreateDate,
-                                                tz = "MST")) |>
-    dplyr::arrange(DateTime) |>
-    dplyr::relocate(DateTime, .before = SubSecCreateDate) |>
-    dplyr::select(-SubSecCreateDate)
+    mutate(DateTime = ymd_hms(SubSecCreateDate,
+                              tz = "MST")) |>
+    arrange(DateTime) |>
+    relocate(DateTime, .before = SubSecCreateDate) |>
+    select(-SubSecCreateDate)
   
   
   # Make spatial
   pts <- ex |>
-    sf::st_as_sf(coords = c("GPSLongitude",
-                            "GPSLatitude",
-                            "GPSAltitude"),
-                 dim = "XYZ",
-                 crs = crs)
+    st_as_sf(coords = c("GPSLongitude",
+                        "GPSLatitude",
+                        "GPSAltitude"),
+             dim = "XYZ",
+             crs = crs)
   
-  # mapview::mapview(sf::st_zm(pts))
+  # mapview::mapview(st_zm(pts))
   
   
   # Calculate bearing from focal point to next
   # Uses only X and Y dimension, Z ignored
-  pts_coords <- sf::st_coordinates(pts)
-  pts_bearings <- geosphere::bearing(pts_coords[, 1:2])
+  pts_coords <- st_coordinates(pts)
+  pts_bearings <- bearing(pts_coords[, 1:2])
   
   # Recycle last bearing
   pts_bearings[length(pts_bearings)] <- pts_bearings[length(pts_bearings) - 1]
   
   # Add to pts and assign units (degrees)
   pts <- pts |>
-    dplyr::mutate(Bearing = units::as_units(pts_bearings, "degrees")) |>
-    dplyr::relocate(Bearing, .before = geometry)
+    mutate(Bearing = as_units(pts_bearings, "degrees")) |>
+    relocate(Bearing, .before = geometry)
   
   return(pts)
   

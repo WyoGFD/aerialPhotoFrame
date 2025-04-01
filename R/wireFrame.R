@@ -39,13 +39,13 @@ wireFrame <- function(pts,
   
   
   # Strip Z dimension from points and project to desired CRS
-  pts <- sf::st_zm(pts) |>
-    sf::st_transform(crs = crs)
+  pts <- st_zm(pts) |>
+    st_transform(crs = crs)
   
   # Check whether the units of the CRS are meters
   # The crs_ud_units function isn't exported from sf, hence the triple colon :::
-  if (!identical(sf:::crs_ud_unit(sf::st_crs(pts)),
-                 units::as_units(1, "m"))) {
+  if (!identical(sf:::crs_ud_unit(st_crs(pts)),
+                 as_units(1, "m"))) {
     stop("The specified crs must have units of meters.")
   }
   
@@ -54,15 +54,15 @@ wireFrame <- function(pts,
   # points
   # Keep filename as primary key
   # and only those cols needed to create the proper wireframe dimensions
-  pts_df <- cbind(sf::st_drop_geometry(pts),
-                  sf::st_coordinates(pts)) |>
-    dplyr::select(FileName,
-                  ImageHeight,
-                  ImageWidth,
-                  FOV,
-                  AltitudeAGL,
-                  X,
-                  Y)
+  pts_df <- cbind(st_drop_geometry(pts),
+                  st_coordinates(pts)) |>
+    select(FileName,
+           ImageHeight,
+           ImageWidth,
+           FOV,
+           AltitudeAGL,
+           X,
+           Y)
   
   
   # Use camera specs (focal length and image sensor size) and altitude AGL to
@@ -78,13 +78,13 @@ wireFrame <- function(pts,
   # sensorWidth <- 36  # mm
   # focalLength <- 50  # mm
   # (a <- 2 * atan(sensorWidth / (2 * focalLength)))
-  # (a <- units::as_units(a, "radians"))
-  # (a <- units::set_units(a, "degrees"))
+  # (a <- as_units(a, "radians"))
+  # (a <- set_units(a, "degrees"))
   
   # Extract the field of view from exif data (first part of FOV col)
   pts_df <- pts_df |>
-    mutate(fov = units::as_units(as.numeric(gsub(" .*", "", FOV)),
-                                 "degrees"),
+    mutate(fov = as_units(as.numeric(gsub(" .*", "", FOV)),
+                          "degrees"),
            fov_half = fov / 2)
   
   
@@ -100,8 +100,8 @@ wireFrame <- function(pts,
   # Start by calculating coordinates of each corner vertex from centroid
   # sf needs one vertex recycled to close polygon - using top-left here
   wires <- pts_df |>
-    mutate(X = units::as_units(X, "m"),
-           Y = units::as_units(Y, "m"),
+    mutate(X = as_units(X, "m"),
+           Y = as_units(Y, "m"),
            X_TL1 = X - w_half,
            X_TR = X + w_half,
            X_BR = X + w_half,
@@ -117,23 +117,23 @@ wireFrame <- function(pts,
   # Reshape to have X, Y pair for each corner of the frame (plus one recycled
   # to close shape)
   wires <- wires |>
-    dplyr::select(FileName,
-                  X_TL1:Y_TL2) |>
-    tidyr::pivot_longer(-FileName) |>
-    tidyr::separate_wider_delim(name,
-                                delim = "_",
-                                names = c("dimension", "corner")) |>
-    tidyr::pivot_wider(names_from = dimension,
-                       values_from = value)
+    select(FileName,
+           X_TL1:Y_TL2) |>
+    pivot_longer(-FileName) |>
+    separate_wider_delim(name,
+                         delim = "_",
+                         names = c("dimension", "corner")) |>
+    pivot_wider(names_from = dimension,
+                values_from = value)
   
   # Make spatial
   # https://stackoverflow.com/questions/52669779/convert-sets-of-spatial-coordinates-to-polygons-in-r-using-sf
   wires <- wires |>
-    sf::st_as_sf(coords = c("X", "Y"),
-                 crs = crs) |>
-    dplyr::group_by(FileName) |>
-    dplyr::summarize(geometry = sf::st_combine(geometry)) |>
-    sf::st_cast("POLYGON")
+    st_as_sf(coords = c("X", "Y"),
+             crs = crs) |>
+    group_by(FileName) |>
+    summarize(geometry = st_combine(geometry)) |>
+    st_cast("POLYGON")
   
   # # Plot
   # plot(sf::st_geometry(wires))
@@ -150,7 +150,7 @@ wireFrame <- function(pts,
   scaleFactor <- 1
   
   # Convert rotation degrees (from N) from degrees to radians
-  bearingRadians <- units::set_units(pts$Bearing, "radians")
+  bearingRadians <- set_units(pts$Bearing, "radians")
   
   
   # Function to rotate
@@ -169,11 +169,11 @@ wireFrame <- function(pts,
   
   # sfc of wires
   wires_sfc <- wires |>
-    sf::st_geometry(wires)
+    st_geometry(wires)
   
   # sfc of points to rotate around (using wire centroids) 
   pts_sfc <- wires_sfc |>
-    sf::st_centroid()
+    st_centroid()
   
   
   # Apply transformation photo by photo, then bind them all together
@@ -184,8 +184,8 @@ wireFrame <- function(pts,
   
   # Make sf object with primary key added back to data.frame
   wires_rot <- wires_rot_sfc |>
-    sf::st_sf(FileName = wires$FileName,
-              crs = sf::st_crs(wires))
+    st_sf(FileName = wires$FileName,
+          crs = st_crs(wires))
   
   
   # plot(sf::st_geometry(wires_rot))
@@ -196,15 +196,15 @@ wireFrame <- function(pts,
   
   
   # Join back the cols present in input data
-  pts_toJoin <- sf::st_drop_geometry(pts)
+  pts_toJoin <- st_drop_geometry(pts)
   
   wires_out <- wires_rot |>
-    dplyr::left_join(pts_toJoin,
-                     by = "FileName")
+    left_join(pts_toJoin,
+              by = "FileName")
   
   # Set name of geometry col to sf standard "geometry"
   names(wires_out)[ncol(wires_out)] <- "geometry"
-  sf::st_geometry(wires_out) <- "geometry"
+  st_geometry(wires_out) <- "geometry"
   
   # plot(sf::st_geometry(wires_out))
   # plot(sf::st_geometry(pts), col = "black", add = TRUE)
@@ -212,8 +212,8 @@ wireFrame <- function(pts,
   
   # Add area of wireframe
   wires_out <- wires_out |>
-    dplyr::mutate(Area = sf::st_area(wires_out)) |>
-    dplyr::relocate(Area, .before = "geometry")
+    mutate(Area = st_area(wires_out)) |>
+    relocate(Area, .before = "geometry")
   
   
   return(wires_out)

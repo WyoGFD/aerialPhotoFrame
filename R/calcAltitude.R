@@ -42,43 +42,43 @@ calcAltitude <- function(pts,
   # Saves terra::extract from doing the conversion on the fly and should be
   # faster than projecting the raster
   crs_ned <- 4269
-  pts <- sf::st_transform(pts,
-                          crs = crs_ned)
+  pts <- st_transform(pts,
+                      crs = crs_ned)
   
   
   # Extent of points
-  bbox <- sf::st_bbox(pts) |>
-    sf::st_as_sfc()
+  bbox <- st_bbox(pts) |>
+    st_as_sfc()
   
   
   # Download DEM for the area
   # See help doc for FedData::get_ned for info on where these rasters are stored
   # on the local machine
-  dem <- FedData::get_ned(template = bbox,
-                          label = "aerialPhotoFrame",
-                          res = res,
-                          force.redo = force.redo)
+  dem <- get_ned(template = bbox,
+                 label = "aerialPhotoFrame",
+                 res = res,
+                 force.redo = force.redo)
   
   # terra::plot(dem)
   # mapview::mapview(dem) +
-  #   mapview::mapview(sf::st_zm(pts))
+  #   mapview::mapview(st_zm(pts))
   
   
   # Extract elevation values at points
   pts <- pts |>
-    dplyr::mutate(AltitudeCamera = sf::st_coordinates(pts)[, 3],
-                  AltitudeGround = terra::extract(dem,
-                                              pts,
-                                              raw = TRUE)[, 2],
-                  AltitudeAGL = AltitudeCamera - AltitudeGround) |>
-    dplyr::relocate(geometry, .after = AltitudeAGL)
+    mutate(AltitudeCamera = st_coordinates(pts)[, 3],
+           AltitudeGround = extract(dem,
+                                    pts,
+                                    raw = TRUE)[, 2],
+           AltitudeAGL = AltitudeCamera - AltitudeGround) |>
+    relocate(geometry, .after = AltitudeAGL)
   
   
   # Assign units to meters
   pts <- pts |>
-    dplyr::mutate(AltitudeCamera = units::as_units(AltitudeCamera, "m"),
-                  AltitudeGround = units::as_units(AltitudeGround, "m"),
-                  AltitudeAGL = units::as_units(AltitudeAGL, "m"))
+    mutate(AltitudeCamera = as_units(AltitudeCamera, "m"),
+           AltitudeGround = as_units(AltitudeGround, "m"),
+           AltitudeAGL = as_units(AltitudeAGL, "m"))
   
   
   return(pts)
