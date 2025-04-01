@@ -35,5 +35,6 @@
 #' @importFrom tidyr separate_wider_delim
 #' @importFrom units as_units
 #' @importFrom units set_units
+#' @importFrom utils packageVersion
 ## usethis namespace: end
 NULL

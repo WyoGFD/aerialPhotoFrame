@@ -25,4 +25,5 @@ Imports:
     sf,
     terra,
     tidyr,
-    units
+    units,
+    utils
