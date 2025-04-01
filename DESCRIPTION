@@ -1,7 +1,7 @@
 Package: aerialPhotoFrame
 Title: Create Ground Footprint Wireframes from Aerial Photos
-Version: 0.9.0
-Date: 2025-03-28
+Version: 0.9.1
+Date: 2025-04-01
 Authors@R: c(
     person("Jason", "Carlisle", role = c("aut", "cre"), email = "jason.carlisle@wyo.gov"),
     person("Eric", "Newkirk", role = "aut", email = "eric.newkirk@wyo.gov") 
