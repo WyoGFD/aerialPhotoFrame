@@ -45,7 +45,7 @@ wireFrame <- function(pts,
   # Check whether the units of the CRS are meters
   # The crs_ud_units function isn't exported from sf, hence the triple colon :::
   if (!identical(sf:::crs_ud_unit(sf::st_crs(pts)),
-                units::as_units(1, "m"))) {
+                 units::as_units(1, "m"))) {
     stop("The specified crs must have units of meters.")
   }
   
@@ -142,7 +142,7 @@ wireFrame <- function(pts,
   # mapview::mapview(wires) +
   #   mapview::mapview(pts)
   
-
+  
   
   # Rotate using affine transformation
   # Could also scale larger or smaller using same, but opted to construct to
@@ -176,18 +176,19 @@ wireFrame <- function(pts,
     sf::st_centroid()
   
   
-  # Apply transformation photo by photo
-  wires_rot_sfc <- do.call(rbind, lapply(1:length(wires_sfc), function(i){
-    (wires_sfc[i] - pts_sfc[i]) * rot(bearingRadians[i]) * scaleFactor + pts_sfc[i]
-  }))
+  # Apply transformation photo by photo, then bind them all together
+  wires_rot_sfc <- dplyr::bind_rows(
+    lapply(1:length(wires_sfc), function(i) {
+      (wires_sfc[i] - pts_sfc[i]) * rot(bearingRadians[i]) * scaleFactor + pts_sfc[i]
+    }))
   
-
+  
   # Make sf object with primary key added back to data.frame
   wires_rot <- wires_rot_sfc |>
     sf::st_sf(FileName = wires$FileName,
               crs = sf::st_crs(wires))
   
-
+  
   # plot(sf::st_geometry(wires_rot))
   # plot(sf::st_geometry(pts), col = "black", add = TRUE)
   # 
@@ -214,9 +215,9 @@ wireFrame <- function(pts,
   wires_out <- wires_out |>
     dplyr::mutate(Area = sf::st_area(wires_out)) |>
     dplyr::relocate(Area, .before = "geometry")
-
   
-return(wires_out)
-
+  
+  return(wires_out)
+  
   
 }
