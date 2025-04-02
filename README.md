@@ -56,7 +56,11 @@ the installed package (e.g.,
 ``` r
 # Load package
 library(aerialPhotoFrame)
+```
 
+    aerialPhotoFrame (version 0.9.1)
+
+``` r
 # Path to installed package to access example images
 packagePath <- "C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame"
 
@@ -72,30 +76,30 @@ pts <- extractPoints(file.path(packagePath,
 head(data.frame(sf::st_drop_geometry(pts)))
 ```
 
-                             FileName
-    1 EL430_2025_00501_2025-02-23.JPG
-    2 EL430_2025_00502_2025-02-23.JPG
-    3 EL430_2025_00503_2025-02-23.JPG
-    4 EL430_2025_00504_2025-02-23.JPG
-    5 EL430_2025_00505_2025-02-23.JPG
-                                                                                     SourceFile
-    1 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/EL430_2025_00501_2025-02-23.JPG
-    2 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/EL430_2025_00502_2025-02-23.JPG
-    3 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/EL430_2025_00503_2025-02-23.JPG
-    4 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/EL430_2025_00504_2025-02-23.JPG
-    5 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/EL430_2025_00505_2025-02-23.JPG
+             FileName
+    1 Image_25042.JPG
+    2 Image_25043.JPG
+    3 Image_25044.JPG
+    4 Image_25045.JPG
+    5 Image_25046.JPG
+                                                                     SourceFile
+    1 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/Image_25042.JPG
+    2 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/Image_25043.JPG
+    3 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/Image_25044.JPG
+    4 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/Image_25045.JPG
+    5 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/Image_25046.JPG
                  DateTime ImageWidth ImageHeight Megapixels FocalLength
-    1 2025-02-23 17:07:12       8256        5504   45.44102          50
-    2 2025-02-23 17:07:14       8256        5504   45.44102          50
-    3 2025-02-23 17:07:15       8256        5504   45.44102          50
-    4 2025-02-23 17:07:17       8256        5504   45.44102          50
-    5 2025-02-23 17:07:19       8256        5504   45.44102          50
+    1 2025-03-01 14:22:49       8256        5504   45.44102          50
+    2 2025-03-01 14:22:51       8256        5504   45.44102          50
+    3 2025-03-01 14:22:53       8256        5504   45.44102          50
+    4 2025-03-01 14:22:55       8256        5504   45.44102          50
+    5 2025-03-01 14:22:57       8256        5504   45.44102          50
                          FOV RollAngle PitchAngle  YawAngle      Bearing
-    1 39.597786155869 0.0072  33.61902  -88.83807 -89.25552 91.00436 [°]
-    2 39.597786155869 0.0072  -9.67584  -88.88766 -90.06952 91.16169 [°]
-    3 39.597786155869 0.0072 -24.80252  -88.62881 -90.47284 91.53217 [°]
-    4 39.597786155869 0.0072  -3.85016  -87.28128 -90.11310 91.83444 [°]
-    5 39.597786155869 0.0072 -26.84106  -88.65485 -90.51263 91.83444 [°]
+    1 39.597786155869 0.0072 -171.4419  -92.63480 -90.25375 89.81921 [°]
+    2 39.597786155869 0.0072  161.6159  -90.82028 -89.53882 89.59467 [°]
+    3 39.597786155869 0.0072 -119.5836  -92.34445 -94.14117 89.98836 [°]
+    4 39.597786155869 0.0072 -142.0549  -92.94086 -92.22449 89.94630 [°]
+    5 39.597786155869 0.0072  146.9061  -93.25247 -87.56607 89.94630 [°]
 
 ``` r
 # Map
@@ -111,7 +115,7 @@ pts <- calcAltitude(pts)
 
     Area of interest includes 1 NED tiles.
 
-    (Down)Loading NED tile for 42N and 109W.
+    (Down)Loading NED tile for 42N and 108W.
 
 ``` r
 # View first few rows
@@ -119,36 +123,36 @@ pts <- calcAltitude(pts)
 head(data.frame(sf::st_drop_geometry(pts)))
 ```
 
-                             FileName
-    1 EL430_2025_00501_2025-02-23.JPG
-    2 EL430_2025_00502_2025-02-23.JPG
-    3 EL430_2025_00503_2025-02-23.JPG
-    4 EL430_2025_00504_2025-02-23.JPG
-    5 EL430_2025_00505_2025-02-23.JPG
-                                                                                     SourceFile
-    1 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/EL430_2025_00501_2025-02-23.JPG
-    2 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/EL430_2025_00502_2025-02-23.JPG
-    3 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/EL430_2025_00503_2025-02-23.JPG
-    4 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/EL430_2025_00504_2025-02-23.JPG
-    5 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/EL430_2025_00505_2025-02-23.JPG
+             FileName
+    1 Image_25042.JPG
+    2 Image_25043.JPG
+    3 Image_25044.JPG
+    4 Image_25045.JPG
+    5 Image_25046.JPG
+                                                                     SourceFile
+    1 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/Image_25042.JPG
+    2 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/Image_25043.JPG
+    3 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/Image_25044.JPG
+    4 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/Image_25045.JPG
+    5 C:/Users/jadcarlisle/Documents/R/aerialPhotoFrame/extdata/Image_25046.JPG
                  DateTime ImageWidth ImageHeight Megapixels FocalLength
-    1 2025-02-23 17:07:12       8256        5504   45.44102          50
-    2 2025-02-23 17:07:14       8256        5504   45.44102          50
-    3 2025-02-23 17:07:15       8256        5504   45.44102          50
-    4 2025-02-23 17:07:17       8256        5504   45.44102          50
-    5 2025-02-23 17:07:19       8256        5504   45.44102          50
+    1 2025-03-01 14:22:49       8256        5504   45.44102          50
+    2 2025-03-01 14:22:51       8256        5504   45.44102          50
+    3 2025-03-01 14:22:53       8256        5504   45.44102          50
+    4 2025-03-01 14:22:55       8256        5504   45.44102          50
+    5 2025-03-01 14:22:57       8256        5504   45.44102          50
                          FOV RollAngle PitchAngle  YawAngle      Bearing
-    1 39.597786155869 0.0072  33.61902  -88.83807 -89.25552 91.00436 [°]
-    2 39.597786155869 0.0072  -9.67584  -88.88766 -90.06952 91.16169 [°]
-    3 39.597786155869 0.0072 -24.80252  -88.62881 -90.47284 91.53217 [°]
-    4 39.597786155869 0.0072  -3.85016  -87.28128 -90.11310 91.83444 [°]
-    5 39.597786155869 0.0072 -26.84106  -88.65485 -90.51263 91.83444 [°]
+    1 39.597786155869 0.0072 -171.4419  -92.63480 -90.25375 89.81921 [°]
+    2 39.597786155869 0.0072  161.6159  -90.82028 -89.53882 89.59467 [°]
+    3 39.597786155869 0.0072 -119.5836  -92.34445 -94.14117 89.98836 [°]
+    4 39.597786155869 0.0072 -142.0549  -92.94086 -92.22449 89.94630 [°]
+    5 39.597786155869 0.0072  146.9061  -93.25247 -87.56607 89.94630 [°]
       AltitudeCamera AltitudeGround  AltitudeAGL
-    1   2566.082 [m]   2150.821 [m] 415.2612 [m]
-    2   2572.137 [m]   2149.412 [m] 422.7249 [m]
-    3   2578.966 [m]   2147.770 [m] 431.1962 [m]
-    4   2585.556 [m]   2144.753 [m] 440.8026 [m]
-    5   2590.594 [m]   2141.549 [m] 449.0452 [m]
+    1   2168.104 [m]   1870.021 [m] 298.0835 [m]
+    2   2164.875 [m]   1858.686 [m] 306.1891 [m]
+    3   2160.944 [m]   1858.452 [m] 302.4921 [m]
+    4   2161.907 [m]   1859.270 [m] 302.6370 [m]
+    5   2165.680 [m]   1865.929 [m] 299.7506 [m]
 
 ``` r
 # Histogram of camera altitudes above ground level
