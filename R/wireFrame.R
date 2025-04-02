@@ -177,17 +177,19 @@ wireFrame <- function(pts,
   
   
   # Apply transformation photo by photo, then bind them all together
-  wires_rot_sfc <- do.call(rbind, lapply(1:length(wires_sfc), function(i) {
+  wires_rot_sfc <- do.call(c, lapply(1:length(wires_sfc), function(i) {
     (wires_sfc[i] - pts_sfc[i]) * rot(bearingRadians[i]) * scaleFactor + pts_sfc[i]
   }))
   
   
   # Make sf object with primary key added back to data.frame
+  # and ensure standard "geometry" name for geometry column (was wires_rot_sfc)
   wires_rot <- wires_rot_sfc |>
     st_sf(FileName = wires$FileName,
-          crs = st_crs(wires))
+          crs = st_crs(wires)) |>
+    st_set_geometry("geometry")
   
-  
+
   # plot(sf::st_geometry(wires_rot))
   # plot(sf::st_geometry(pts), col = "black", add = TRUE)
   # 
@@ -202,15 +204,12 @@ wireFrame <- function(pts,
     left_join(pts_toJoin,
               by = "FileName")
   
-  # Set name of geometry col to sf standard "geometry"
-  names(wires_out)[ncol(wires_out)] <- "geometry"
-  st_geometry(wires_out) <- "geometry"
-  
+
   # plot(sf::st_geometry(wires_out))
   # plot(sf::st_geometry(pts), col = "black", add = TRUE)
   
   
-  # Add area of wireframe
+  # Calculate area of each wireframe and add column
   wires_out <- wires_out |>
     mutate(Area = st_area(wires_out)) |>
     relocate(Area, .before = "geometry")
