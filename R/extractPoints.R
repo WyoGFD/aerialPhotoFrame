@@ -51,7 +51,7 @@ extractPoints <- function(dir,
   
   # Check whether there are files to read in
   if (identical(fileList, character(0))) {
-    stop("No files in directory that match valid extensions.")
+    stop("No files were found that match valid extensions.")
   }
   
   # Check that file names are unique, they are treated as the unique ID
